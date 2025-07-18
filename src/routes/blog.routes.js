@@ -3,6 +3,10 @@ const blogRoutes = express.Router()
 
 // Get all blogposts
 
-// Search for a particular blogpost by params 
+// Search for blogposts by params 
+
+// Create a blogpost
+
+// Delete a blogpost
 
 export default blogRoutes;

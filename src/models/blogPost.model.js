@@ -6,4 +6,4 @@ const blogPostSchema = new Schema({
     content: String,
 }, {timestamps: true})
 
-export const blogPostModel = model('blogPost', blogPostSchema)
+export const blogposts = model('Blog Posts', blogPostSchema)
