@@ -1,5 +1,6 @@
 import { model, Schema } from "mongoose";
 
+
 const userSchema = new Schema({
     username: { type: String, unique: true, required: true },
     password: { type: String, minLength: [8, "Password must be at least 8 characters"], required: true },
@@ -9,4 +10,4 @@ const userSchema = new Schema({
     role: { type: String, enum: { values: ['admin', 'user'] }, default: "user" }
 })
 
-export const userModel = model('users', userSchema)
+export const User = model('user', userSchema)

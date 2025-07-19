@@ -15,7 +15,10 @@
   "author": "Favour A. Uzochukwu",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.0",
+    "ejs": "^3.1.10",
     "express": "^5.1.0",
     "express-ejs-layouts": "^2.5.1",
     "jsonwebtoken": "^9.0.2",
