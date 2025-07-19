@@ -8,5 +8,10 @@
         <input type="password" name="password" id="password" required>
     </label>
     <button type="submit">Submit</button>
-
 </form>
+
+<% if (typeof(message) !=="undefined" || typeof(error) !=="undefined" ) { %>
+    <script>
+        alert("<%= message %>");
+    </script>
+    <% } %>

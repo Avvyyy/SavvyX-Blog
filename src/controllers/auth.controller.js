@@ -19,10 +19,14 @@ export const signgUp = async (req, res) => {
         payload.password = await bcrypt.hash(payload.password, 10);
         const user = await Users.create(req.body);
         if (user) {
-            const token = await jwt.sign({ username: user.username }, SECRET);
-            return res.json({ token });
+            await jwt.sign({ username: user.username }, SECRET);
+            if (user.role === "admin") {
+                return res.render("admin", { user });
+            } else {
+                return res.render("index", { user });
+            }
         } else {
-            return res.json({ error: "Try signing up again" });
+            return res.render("getStarted", {error: "Retry sign up"});
         }
     } catch (error) {
         res.status(400).json({ error });
@@ -44,19 +48,23 @@ export const login = async (req, res) => {
         if (user) {
             const result = await bcrypt.compare(password, user.password);
             if (result) {
-                const token = await jwt.sign({ username: user.username }, SECRET);
-                return res.json({ token });
+                await jwt.sign({ username: user.username }, SECRET);
+
+                if (user.role === "admin") {
+                    return res.render("admin", { user });
+                } else {
+                    return res.render("index", { user });
+                }
             } else {
-                return res.status(400).json({ error: "passwords don\t match" });
+                return res.render("login", { message: "Passwords do not match" })
             }
         } else {
-            return res.status(400).json({ error: "User doesn't exist" });
+            res.status(400)
+            return res.render("login", { message: "Username does not exist" })
         }
     } catch (error) {
         return res.status(500).json({ error: error.message || "An unexpected error occurred" });
     }
-
-
 }
 
 export const getForgotPasswordPage = async (req, res) => {
@@ -115,12 +123,12 @@ export const resetPassword = async (req, res) => {
             return res.status(400).json({ message: "Invalid or expired token" })
         }
 
-        user.password =  await bcrypt.hash(password, 10);
+        user.password = await bcrypt.hash(password, 10);
         user.resetToken = null;
         user.resetTokenExpiry = null;
         await user.save();
 
-        res.json({ message: "Password reset successful" });
+        res.render('login', { message: "Password reset successful" })
     } catch (error) {
         res.status(400).json({ message: "Invalid token" });
     }
