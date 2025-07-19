@@ -9,4 +9,4 @@ const userSchema = new Schema({
     role: { type: String, enum: { values: ['admin', 'user'] }, default: "user" }
 })
 
-export const userModel = model('users', userSchema)
+export const Users = model('users', userSchema)

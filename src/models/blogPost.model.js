@@ -5,4 +5,4 @@ const blogPostSchema = new Schema({
     content: {type: String, required: true},
 }, {timestamps: true})
 
-export const blogPostModel = model('blogPost', blogPostSchema)
+export const BlogPosts = model('blog post', blogPostSchema)
