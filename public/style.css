@@ -1,0 +1,215 @@
+@import url('https://fonts.googleapis.com/css2?family=Barriecito&display=swap');
+
+:root {
+    --primary: #731963;
+    --gray: #CBD2D0;
+    --white: #FFFDFD;
+}
+
+*,
+*::after,
+*::before {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+    font-family: "Barriecito", system-ui;
+    list-style: none;
+    background-color: var(--white);
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    position: sticky;
+    top: 0px;
+}
+
+nav div {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 30%;
+}
+
+#searchBar {
+    border: 1px solid var(--gray);
+    border-radius: 10%;
+    height: 3.5em;
+    width: 15em;
+    border-radius: 999px;
+    padding: 0.5em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#searchBar input {
+    border: 0px;
+    height: 100%;
+    width: 100%;
+    background-color: transparent;
+    outline: 0px;
+
+}
+
+#searchBar button {
+    border: 0px;
+    outline: none;
+    background-color: transparent;
+}
+
+h1,
+h2,
+h3 {
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 35px;
+}
+
+h2 {
+    font-size: 30px;
+}
+
+h3 {
+    font-size: 20px;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+    transition: text-decoration 5s ease-in-out 2s;
+}
+
+button {
+    width: 30%;
+    height: 3em;
+    border-radius: 10px;
+    border: 2px solid gray;
+    background-color: rgb(249, 249, 249);
+    font-size: 15px;
+}
+
+#content {
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+}
+
+.authForm {
+    margin: auto;
+    width: 45%;
+    max-width: 100%;
+    height: 100%;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 20px;
+    padding: 20px;
+    transform: translateY(1/2);
+}
+
+input {
+    width: 100%;
+    height: 4em;
+    outline: 0px;
+    border: 0px;
+    background-color: transparent;
+    border-bottom: 1px solid var(--gray);
+}
+
+.actionButtons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+input::placeholder,
+input,
+textarea,
+textarea::placeholder {
+    font-size: 20px;
+}
+
+.container,
+.blogContainer,
+.postContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    margin: auto;
+    width: 70%;
+    gap: 2em;
+}
+
+.blogContainer {
+    gap: 0.5em;
+}
+
+.postContainer {
+    gap: 2em;
+    ;
+}
+
+.managementContainer {
+    display: flex;
+    gap: 2em;
+}
+
+.postContainer p {
+    border-top: 1px solid gray;
+    border-bottom: 1px solid gray;
+    padding-top: 2em;
+    padding-bottom: 2em;
+}
+
+
+.blogContainer {
+    border-bottom: 1px solid gray;
+    padding-bottom: 1em;
+}
+
+.blogContainer p {
+    text-wrap: no-wrap;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
+.blogForm {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+    margin: auto;
+}
+
+.blogForm textarea {
+    outline: 0px;
+    border-radius: 10px;
+}
+
+
+footer {
+    position: fixed;
+    bottom: 0px;
+    padding: 20px;
+    width: 100%;
+    border-top: 0.5px solid gray;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+footer a:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}

@@ -1,0 +1,12 @@
+<form action="/auth/login" method="post" class="authForm">
+    <input type="text" name="username" id="username" placeholder="Username" required>
+    <input type="password" name="password" id="password" required placeholder="Password">
+    <div class="actionButtons">
+        <button type="button" onclick="window.location.href='/auth/get-started/'">Get Started</button>
+        <button type="submit">Login</button>
+    </div>
+</form>
+
+<script>
+    if (message) alert("<%= message %>");
+</script>

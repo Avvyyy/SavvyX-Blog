@@ -1,0 +1,13 @@
+<form action="/auth/get-started" method="post" class="authForm">
+
+    <input type="text" name="username" id="username" placeholder="Username">
+    <input type="password" name="password" id="password" placeholder="Password">
+    <input type="email" name="email" id="email" placeholder="Email">
+
+    <input type="text" name="adminToken" id="adminToken" value="<%= adminToken %>" hidden>
+
+       <div class="actionButtons">
+        <button type="button" onclick="window.location.href='/auth/login/'">Login</button>
+        <button type="submit">Get Started</button>
+    </div>
+</form>

@@ -1,0 +1,26 @@
+<form method="post" id="createForm" class="blogForm">
+   
+        <input type="text" name="title" id="title" placeholder="Title" required>
+
+
+        <textarea name="content" id="content" cols="30" rows="10" placeholder="Your content goes in here"></textarea>
+   
+    <button type="submit" onclick="createPost(e)">Post</button>
+</form>
+
+<script>
+    const createPost = async (e) => {
+        e.preventDefault();
+        try {
+            await fetch('blog/create/', { method: 'POST' }).then((response) => {
+                if (response.ok) {
+                    alert("New blogpost created successfully!");
+                } else {
+                    alert("Failed to create new blogpost")
+                }
+            })
+        } catch (error) {
+            alert("An unexpected error occurred");
+        }
+    }
+</script>

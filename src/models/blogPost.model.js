@@ -5,4 +5,5 @@ const blogPostSchema = new Schema({
     content: {type: String, required: true},
 }, {timestamps: true})
 
+blogPostSchema.index({title: 'text', content:'text'});
 export const BlogPosts = model('blog post', blogPostSchema)
