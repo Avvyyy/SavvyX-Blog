@@ -1,0 +1,40 @@
+<form id="editForm" class="blogForm" method="patch">
+    <input type="text" name="title" id="newTitle" value="<%= blogPost.title %>">
+  <label for="content">
+    Content:
+    <textarea name="content" id="newContent" cols="30" rows="10"><%= blogPost.content %></textarea>
+  </label>
+  <button type="submit">Edit</button>
+</form>
+
+
+<script>
+  document.getElementById('editForm').addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const title = document.getElementById('newTitle').value;
+    const content = document.getElementById('newContent').value;
+    const blogId = "<%= blogPost._id %>";
+
+    try {
+      const response = await fetch(`/blog/admin/edit/${blogId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ title, content }),
+      });
+
+      if (response.ok) {
+        alert('Blog post updated successfully!');
+        window.location.href = '/blog/admin';
+      } else {
+        alert(`Failed to update post: ${response.message || 'Unknown error'}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('An error occurred while updating the post.');
+    }
+
+  })
+</script>

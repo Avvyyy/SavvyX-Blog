@@ -1,0 +1,85 @@
+<div class="container">
+    <h2>Welcome <% if (user) { %>
+            <%= user %>
+                <% } else { %>
+                    User
+                    <% } %>
+    </h2>
+
+
+    <% if (blogPosts && blogPosts.length> 0) { %>
+        <% blogPosts.forEach(post=> { %>
+            <div class="managementContainer">
+                <a href="/blog/admin/post/<%= post._id %>" class="blogContainer container">
+                    <h3>
+                        <%= post.title %>
+                    </h3>
+                    <p class="blogContent">
+                        <%= post.container %>
+                    </p>
+                </a>
+                <div class="actionButtons adminActionButtons">
+                    <button type="button"
+                        onclick="window.location.href='/blog/admin/edit/<%= post._id %>'">Edit</button>
+                    <br>
+                    <button type="button" class="deleteButton" data-id="<%= post._id %>">Delete</button>
+
+                </div>
+            </div>
+            <% }) %>
+                <% } else { %>
+                    <p>No blog posts available.</p>
+                    <% } %>
+
+                        <div>
+                            <a href="/blog/admin/create">Create New Post</a>
+                            <button id="adminLink">Admin Invite Link</button>
+                        </div>
+                        <div id="adminLinkDisplay"></div>
+</div>
+
+<script>
+    document.querySelectorAll('.deleteButton').forEach(button => {
+        button.addEventListener('click', async () => {
+            const id = button.getAttribute('data-id');
+
+            if (confirm("Do you want to delete this blog post?")) {
+                try {
+                    const response = await fetch(`/blog/admin/delete/${id}`, {
+                        method: 'DELETE'
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        alert(data.message);
+                        window.location.reload();
+                    } else {
+                        alert(`Delete failed: ${data.message}`);
+                    }
+                } catch (error) {
+                    alert("An unexpected error occurred");
+                }
+            }
+        });
+    });
+
+    document.getElementById('adminLink').addEventListener("click", async () => {
+        try {
+            const response = await fetch(`/auth/adminToken`);
+
+
+            if (response.ok) {
+                const data = await response.json();
+                const linkElement = document.getElementById("adminLinkDisplay");
+                linkElement.innerHTML = `<a href="${data.data.inviteLink}" target="_blank">Admin Invite Link</a>`;
+                console.log(data.data.inviteLink)
+            } else {
+                alert(data.message || "Could not generate admin link");
+            }
+        } catch (err) {
+            console.error("Error generating link:", err);
+        }
+
+    })
+</script>

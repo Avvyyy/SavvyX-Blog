@@ -1,17 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, height=device-height,initial-scale=1.0">
     <title>SavvyX_Blog</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=search" />
 </head>
+
 <body>
     <nav>
         <h1>SavvyX Blog</h1>
+        <div>
+            <form action="/blog" method="get" id="searchBar">
+                <input type="search" name="searchTerm" id="searchTerm">
+                <button type="submit"><span class="material-symbols-outlined">
+                        search
+                    </span></button>
+            </form>
+            <button type="button" onclick="window.location.href='/auth/logout'">Logout</button>
+        </div>
     </nav>
-    <%-body  %>
+
+    <div id="body">
+        <%-body %>
+    </div>
+
     <footer>
+        <h3>SavvyXCodes</h3>
         <a href="mailto:avvyuzochukwu@gmail.com">Mail Me</a>
     </footer>
 </body>
+
+
 </html>
