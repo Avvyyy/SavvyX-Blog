@@ -93,10 +93,17 @@ button {
     font-size: 15px;
 }
 
-#content {
+label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2em;
+}
+
+#body {
     width: 100%;
     height: 100%;
     padding: 20px;
+    overflow-y: auto;
 }
 
 .authForm {
@@ -130,11 +137,16 @@ input {
     width: 100%;
 }
 
+.adminActionButtons{
+    width: 30%;
+}
+
 input::placeholder,
 input,
 textarea,
 textarea::placeholder {
     font-size: 20px;
+    padding: 10px;
 }
 
 .container,

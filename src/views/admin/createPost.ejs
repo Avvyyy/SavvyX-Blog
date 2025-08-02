@@ -1,26 +1,42 @@
-<form method="post" id="createForm" class="blogForm">
-   
-        <input type="text" name="title" id="title" placeholder="Title" required>
-
-
-        <textarea name="content" id="content" cols="30" rows="10" placeholder="Your content goes in here"></textarea>
-   
-    <button type="submit" onclick="createPost(e)">Post</button>
+<form id="createForm" class="blogForm">
+  <input type="text" name="title" id="title" placeholder="Title" required />
+  <textarea name="content" id="content" cols="30" rows="10" placeholder="Your content goes in here" required></textarea>
+  <button type="submit">Post</button>
 </form>
 
 <script>
-    const createPost = async (e) => {
-        e.preventDefault();
-        try {
-            await fetch('blog/create/', { method: 'POST' }).then((response) => {
-                if (response.ok) {
-                    alert("New blogpost created successfully!");
-                } else {
-                    alert("Failed to create new blogpost")
-                }
-            })
-        } catch (error) {
-            alert("An unexpected error occurred");
+    const form = document.getElementById("createForm");
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      let title = document.getElementById("title").value;
+      let content = document.getElementById("content").value;
+
+      if (!title || !content) {
+        alert("Both title and content are required.");
+        return;
+      }
+
+      try {
+        const response = await fetch("/blog/admin/create/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ title, content })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          alert("New blogpost created successfully!");
+          window.location.href = "/blog/admin";
+        } else {
+          alert(`Failed to create post: ${data.message}`);
         }
-    }
+      } catch (error) {
+        alert("An unexpected error occurred");
+      }
+    });
 </script>

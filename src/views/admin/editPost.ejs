@@ -1,22 +1,19 @@
-<form id="editForm" class="blogForm">
-    <label for="title">
-        Title:
-        <input type="text" name="title" id="title" value="<%= blogPost.title %>">
-    </label>
-    <label for="content">
-        Content:
-        <textarea name="content" id="content" cols="30" rows="10"><%= blogPost.content %></textarea>
-    </label>
-    <button type="submit">Edit</button>
+<form id="editForm" class="blogForm" method="patch">
+    <input type="text" name="title" id="newTitle" value="<%= blogPost.title %>">
+  <label for="content">
+    Content:
+    <textarea name="content" id="newContent" cols="30" rows="10"><%= blogPost.content %></textarea>
+  </label>
+  <button type="submit">Edit</button>
 </form>
 
 
 <script>
-  document.getElementById('editForm').addEventListener('submit', async function (e) {
+  document.getElementById('editForm').addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const title = document.getElementById('title').value;
-    const content = document.getElementById('content').value;
+    const title = document.getElementById('newTitle').value;
+    const content = document.getElementById('newContent').value;
     const blogId = "<%= blogPost._id %>";
 
     try {
@@ -30,14 +27,14 @@
 
       if (response.ok) {
         alert('Blog post updated successfully!');
-        window.location.href = '/blog/admin'; 
+        window.location.href = '/blog/admin';
       } else {
-        const error = await response.json();
-        alert(`Failed to update post: ${error.message || 'Unknown error'}`);
+        alert(`Failed to update post: ${response.message || 'Unknown error'}`);
       }
     } catch (err) {
       console.error(err);
       alert('An error occurred while updating the post.');
     }
-  });
+
+  })
 </script>

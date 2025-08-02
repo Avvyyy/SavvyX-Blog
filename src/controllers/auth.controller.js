@@ -197,7 +197,7 @@ export const generateAdminToken = async (req, res) => {
 
     const inviteLink = `http://localhost:3000/auth/get-started?adminToken=${token}`
 
-    res.json({
+    res.status(201).json({
         status: 200,
         message: "Admin token generated successfully",
         data: {
