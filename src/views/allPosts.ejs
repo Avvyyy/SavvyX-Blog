@@ -1,0 +1,17 @@
+<div class="container">
+    <h2>Explore all blog posts</h2>
+    <ul class="post-list">
+        <% if (posts && posts.length > 0) { %>
+            <% posts.forEach(post => { %>
+                <li>
+                    <a href="/blog/post/<%= post._id %>" class="blogContainer">
+                        <h3><%= post.title %></h3>
+                        <p class="blogContent"><%= post.content %></p>
+                    </a>
+                </li>
+            <% }) %>
+        <% } else { %>
+            <li>No blog posts found.</li>
+        <% } %>
+    </ul>
+</div>

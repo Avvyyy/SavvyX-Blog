@@ -1,13 +1,52 @@
-<form action="/auth/get-started" method="post" class="authForm">
+<form method="post" class="authForm" id="signUpForm">
 
     <input type="text" name="username" id="username" placeholder="Username">
     <input type="password" name="password" id="password" placeholder="Password">
     <input type="email" name="email" id="email" placeholder="Email">
-
-    <input type="text" name="adminToken" id="adminToken" value="<%= adminToken %>" hidden>
-
-       <div class="actionButtons">
+    <input type="text" name="adminToken" id="adminToken">
+    <div class="actionButtons">
         <button type="button" onclick="window.location.href='/auth/login/'">Login</button>
         <button type="submit">Get Started</button>
     </div>
 </form>
+
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const tokenFromURL = params.get("adminToken");
+    if (tokenFromURL) {
+        document.getElementById("adminToken").value = tokenFromURL;
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+    document.getElementById('signUpForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const email = document.getElementById('email').value;
+        const adminToken = document.getElementById('adminToken').value;
+        const payload = { username, password, email, adminToken };
+
+        try {
+            const response = await fetch('/auth/api/get-started', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await response.json();
+            if (!data.status) {
+                alert("Sign up failed: " + data.message);
+                return;
+            }
+
+            localStorage.setItem("token", data.data.token);
+            alert("Sign upsuccessful!");
+            window.location.href = "/blog";
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Something went wrong. Please try again.");
+        }
+    });
+</script>

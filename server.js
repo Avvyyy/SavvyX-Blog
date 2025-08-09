@@ -9,12 +9,10 @@ import expressEjsLayouts from 'express-ejs-layouts';
 import { fileURLToPath } from 'url';
 import authRoutes from './src/routes/auth.routes.js';
 import blogRoutes from './src/routes/blog.routes.js';
+import pages from "./src/routes/pages.routes.js";
 import { dbConnect } from './src/config/db.config.js';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -23,8 +21,9 @@ app.use(express.json());
 app.use(cookieParser())
 app.use(express.urlencoded({extended: true}));
 app.use(expressEjsLayouts);
-app.use('/auth', authRoutes);
-app.use('/blog', blogRoutes);
+app.use('/auth/api', authRoutes);
+app.use('/blog/', blogRoutes);
+app.use("/", pages);
 
 app.use(express.static('public'));
 

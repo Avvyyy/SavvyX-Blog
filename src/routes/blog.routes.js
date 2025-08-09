@@ -1,16 +1,18 @@
 import express from 'express'
 import {isAdmin, isLoggedIn} from '../middlewares/auth.middleware.js'
+import {validateSchema} from '../middlewares/validations.middleware.js';
 import { getBlogPosts, getBlogPost, createBlogPost, updateBlogPost, deleteBlogPost, getCreateBlogPostPage, getUpdateBlogPost } from '../controllers/blog.controller.js';
+import { createPostValidation, upatePostValidation } from '../validations/postValidations.js';
 const blogRoutes = express.Router()
 
 blogRoutes.get('/', getBlogPosts);
 blogRoutes.get('/post/:id',getBlogPost);
-blogRoutes.get('/admin/', isLoggedIn, isAdmin, getBlogPosts);
-blogRoutes.get('/admin/post/:id', isLoggedIn, isAdmin, getBlogPost);
-blogRoutes.get('/admin/create/', isLoggedIn, isAdmin, getCreateBlogPostPage);
-blogRoutes.post('/admin/create/', isLoggedIn, isAdmin, createBlogPost);
-blogRoutes.get('/admin/edit/:id', isLoggedIn, isAdmin, getUpdateBlogPost);
-blogRoutes.patch('/admin/edit/:id', isLoggedIn, isAdmin, updateBlogPost);
-blogRoutes.delete('/admin/delete/:id', isLoggedIn, isAdmin, deleteBlogPost);
+blogRoutes.get('/api/admin/', isLoggedIn, isAdmin, getBlogPosts);
+blogRoutes.get('/api/admin/post/:id', isLoggedIn, isAdmin, getBlogPost);
+blogRoutes.get('/api/admin/create/', isLoggedIn, isAdmin, getCreateBlogPostPage);
+blogRoutes.post('/api/admin/create/', isLoggedIn, isAdmin, validateSchema(createPostValidation),createBlogPost);
+blogRoutes.get('/api/admin/edit/:id', isLoggedIn, isAdmin, getUpdateBlogPost);
+blogRoutes.patch('/api/admin/edit/:id', isLoggedIn, isAdmin, validateSchema(upatePostValidation),updateBlogPost);
+blogRoutes.delete('/api/admin/delete/:id', isLoggedIn, isAdmin, deleteBlogPost);
 
 export default blogRoutes;

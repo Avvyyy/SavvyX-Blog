@@ -1,40 +1,66 @@
-<form id="editForm" class="blogForm" method="patch">
-    <input type="text" name="title" id="newTitle" value="<%= blogPost.title %>">
-  <label for="content">
-    Content:
-    <textarea name="content" id="newContent" cols="30" rows="10"><%= blogPost.content %></textarea>
-  </label>
-  <button type="submit">Edit</button>
-</form>
+<main>
+  <form id="editForm" class="blogForm">
+    <label>
+      Title:
+      <input type="text" name="title" id="newTitle" required />
+    </label>
 
+    <label for="content">
+      Content:
+      <textarea name="content" id="newContent" cols="30" rows="10" required></textarea>
+    </label>
+
+    <button type="submit">Edit</button>
+  </form>
+</main>
 
 <script>
-  document.getElementById('editForm').addEventListener("submit", async (e) => {
+  const postId = "<%= postId %>";
+
+  async function loadPost() {
+    try {
+      const res = await fetch(`/blog/api/${postId}`);
+      const data = await res.json();
+
+      if (data.status && data.data.blogPost) {
+        const post = data.data.blogPost;
+        document.getElementById("newTitle").value = post.title;
+        document.getElementById("newContent").value = post.content;
+      } else {
+        alert("Failed to load post data.");
+      }
+    } catch (err) {
+      console.error("Error fetching post:", err);
+      alert("An error occurred while loading the post.");
+    }
+  }
+
+  document.getElementById("editForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const title = document.getElementById('newTitle').value;
-    const content = document.getElementById('newContent').value;
-    const blogId = "<%= blogPost._id %>";
+    const title = document.getElementById("newTitle").value;
+    const content = document.getElementById("newContent").value;
 
     try {
-      const response = await fetch(`/blog/admin/edit/${blogId}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const response = await fetch(`/blog/api/admin/edit/${postId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, content }),
       });
 
+      const resData = await response.json();
+
       if (response.ok) {
-        alert('Blog post updated successfully!');
-        window.location.href = '/blog/admin';
+        alert("Blog post updated successfully!");
+        window.location.href = "/blog/admin";
       } else {
-        alert(`Failed to update post: ${response.message || 'Unknown error'}`);
+        alert(`Failed to update post: ${resData.message || "Unknown error"}`);
       }
     } catch (err) {
       console.error(err);
-      alert('An error occurred while updating the post.');
+      alert("An error occurred while updating the post.");
     }
+  });
 
-  })
+  loadPost();
 </script>

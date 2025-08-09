@@ -3,8 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, height=device-height,initial-scale=1.0">
-    <title>SavvyX_Blog</title>
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+    <title>
+        <%= title || 'SavvyX Blog' %>
+    </title>
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=search" />
@@ -14,25 +16,62 @@
     <nav>
         <h1>SavvyX Blog</h1>
         <div>
-            <form action="/blog" method="get" id="searchBar">
-                <input type="search" name="searchTerm" id="searchTerm">
-                <button type="submit"><span class="material-symbols-outlined">
-                        search
-                    </span></button>
+            <form method="get" id="searchBar">
+                <input type="search" name="searchTerm" id="searchTerm" placeholder="Search blog...">
+                <button type="submit"><span class="material-symbols-outlined">search</span></button>
             </form>
-            <button type="button" onclick="window.location.href='/auth/logout'">Logout</button>
+            <button type="button" onclick="logout()">Logout</button>
         </div>
     </nav>
 
-    <div id="body">
-        <%-body %>
-    </div>
+    <main id="body">
+        <%- body %>
+    </main>
 
     <footer>
         <h3>SavvyXCodes</h3>
         <a href="mailto:avvyuzochukwu@gmail.com">Mail Me</a>
     </footer>
-</body>
 
+    <script>
+        document.getElementById('searchBar').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const searchTerm = document.getElementById('searchTerm').value.trim();
+
+            try {
+                const res = await fetch(`/blog/?searchTerm=${encodeURIComponent(searchTerm)}`);
+                if (!res.ok) throw new Error(await res.text());
+
+                const posts = await res.json();
+                const list = document.querySelector('.post-list');
+                list.innerHTML = '';
+
+                if (posts.length === 0) {
+                    list.innerHTML = '<li>No blog posts found.</li>';
+                    return;
+                }
+
+                posts.forEach(post => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <a href="/blog/post/${post._id}" class="blogContainer">
+                            <h3>${post.title}</h3>
+                            <p class="blogContent">${post.content}</p>
+                        </a>
+                    `;
+                    list.appendChild(li);
+                });
+            } catch (err) {
+                console.error('Search failed', err);
+                alert('Something went wrong while searching.');
+            }
+        });
+
+        function logout() {
+            localStorage.removeItem('token');
+            window.location.href = '/auth/login';
+        }
+    </script>
+</body>
 
 </html>

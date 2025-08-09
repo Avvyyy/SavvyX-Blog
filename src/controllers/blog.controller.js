@@ -1,49 +1,41 @@
 import { BlogPosts } from "../models/blogPost.model.js"
 
 export const getBlogPosts = async (req, res) => {
-    const { searchTerm } = req.query;
-    const user = req.cookies.user || null;
-    const viewPath = user?.role === 'admin'
-        ? 'admin/postManagement'
-        : 'user/allPosts';
+    const searchTerm = req.query.searchTerm || '';
 
     try {
-        let blogPosts = [];
-        if (searchTerm) {
-            // blogPosts = await BlogPosts.find({ $text: { $search: title, $option: "i" } }); 
-            blogPosts = await BlogPosts.find({ title: { $regex: searchTerm, $options: 'i' } })
-        } else {
-            blogPosts = await BlogPosts.find();
-        }
+        const blogPosts = await BlogPosts.find(
+            searchTerm ? { title: { $regex: searchTerm, $options: 'i' } } : {}
+        ).lean();
 
-        if (blogPosts.length === 0) {
-            return res.render(viewPath, { user: user?.username || null, blogPosts: [], error: searchTerm ? `No post found with title: ${searchTerm}` : "There are no blog posts now" });
-        }
-
-        return res.render(viewPath, { blogPosts, searchTerm, user: user?.username || null });
+        res.render('allPosts', {
+            title: 'All Blog Posts',
+            posts: blogPosts
+        });
     } catch (error) {
-        return res.render(viewPath, { user: user?.username || null, blogPosts: [], error: "Could not retrieve blogposts" });
+        console.error(error);
+        res.status(500).send('An error occurred while fetching blog posts.');
     }
-}
+};
 
 export const getBlogPost = async (req, res) => {
-    const user = req.cookies.user;
-    const viewPath = user.role === 'admin'
-        ? 'admin/'
-        : 'user/';
-
     try {
         const { id } = req.params;
-        const blogPost = await BlogPosts.findById(id);
-        if (!blogPost) return res.redirect('/blog?message=Not found');
+        const blogPost = await BlogPosts.findById(id).lean();
 
+        if (!blogPost) {
+            return res.status(404).send('Post not found');
+        }
 
-        res.render(`${viewPath}singlePost`, { blogPost, user: user?.username || null });
-
+        res.render('singlePost', {
+            title: blogPost.title,
+            blogPost
+        });
     } catch (error) {
-        res.redirect(`/blog/${viewPath}?message=An error occurred`);
+        console.error(error);
+        res.status(500).send('An error occurred while fetching the blog post.');
     }
-}
+};
 
 export const getCreateBlogPostPage = async (req, res) => {
     try {
@@ -57,15 +49,15 @@ export const createBlogPost = async (req, res) => {
     try {
         const payload = req.body;
         const blogPost = await BlogPosts.create(payload);
-        if (blogPost)    return res.status(200).json({
-            statusCode: 201,
+        if (blogPost) return res.status(200).json({
+            status: true,
             data: blogPost,
             message: 'Blogpost created successfully'
         });
     } catch (error) {
         return res.status(400).json({
-            statusCode: 400,
-            error: error.message,
+            status: false,
+            data: error.message,
             message: 'An error occurred while creating blogpost'
         });
     }
@@ -93,18 +85,18 @@ export const updateBlogPost = async (req, res) => {
         const blogPost = await BlogPosts.findByIdAndUpdate(id, payload, { new: true });
 
         if (!blogPost) {
-            return res.status(404).json({ statusCode: 404, error: 'Blogpost not found for update', message: 'Could not update blogpost' });
+            return res.status(404).json({ status: false, data: {}, message: 'Could not update blogpost' });
         }
 
         return res.status(200).json({
-            statusCode: 200,
+            statusCode: true,
             data: blogPost,
             message: 'Blogpost updated successfully'
         });
     } catch (error) {
         return res.status(400).json({
-            statusCode: 400,
-            error: error.message,
+            statusCode: false,
+            data: error.message,
             message: 'An error occurred while updating the blogpost'
         });
 
@@ -116,23 +108,23 @@ export const deleteBlogPost = async (req, res) => {
         const { id } = req.params;
         const isDeleted = await BlogPosts.findByIdAndDelete(id);
         if (!isDeleted) {
-           return res.status(400).json({
-            statusCode: 404,
-            error: "An error occcurred",
-            message: "Delete failed. try again later"
-           })
+            return res.status(400).json({
+                statusCode: false,
+                data: {},
+                message: "Delete failed. try again later"
+            })
         }
 
-       return res.status(200).json({
-            statusCode: 200,
+        return res.status(200).json({
+            status: true,
             message: "Blogpost deleted sucessfully",
-           data: null
-           })
+            data: {}
+        })
     } catch (error) {
-           return res.status(400).json({
-            statusCode: 400,
-            error: "An error occcurred",
+        return res.status(400).json({
+            statusCode: false,
+            data: {},
             message: "Could not delete blogpost. Try again later"
-           })
+        })
     }
 }

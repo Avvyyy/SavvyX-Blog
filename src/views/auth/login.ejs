@@ -1,4 +1,4 @@
-<form action="/auth/login" method="post" class="authForm">
+<form action="/auth/api/login" method="post" class="authForm" id="loginForm">
     <input type="text" name="username" id="username" placeholder="Username" required>
     <input type="password" name="password" id="password" required placeholder="Password">
     <div class="actionButtons">
@@ -8,5 +8,34 @@
 </form>
 
 <script>
-    if (message) alert("<%= message %>");
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const payload = { username, password };
+
+        try {
+            const response = await fetch('/auth/api/login', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await response.json();
+            if (!data.status) {
+                alert("Login failed: " + data.message);
+                return;
+            }
+
+            localStorage.setItem("token", data.data.token);
+            alert("Login successful!");
+            window.location.href = "/blog";
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Something went wrong. Please try again.");
+        }
+    });
 </script>

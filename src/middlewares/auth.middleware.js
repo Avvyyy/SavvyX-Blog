@@ -2,10 +2,8 @@ import jwt from 'jsonwebtoken';
 
 export const isLoggedIn = async (req, res, next) => {
     try {
-        // Use this req.header.authorisation method when building out an API which you are not doing
-        // const token = req.cookies?.token || (req.header.authorization.split(" ")[1]);
-
-        const token = req.cookies?.token;
+        // const token = req.header("Authorization")?.replace("Bearer ", ""); This works or
+        const token = req.header("Authorization")?.split(" ")[1];
 
         if (!token) {
             return res.redirect('/auth/login');
@@ -27,7 +25,7 @@ export const isAdmin = async (req, res, next) => {
         }
 
         if (req.user.role !== "admin") {
-            return res.redirect("/blog/?Only admins can view this page")
+            return res.redirect("/blog/?error=Unauthorised access")
         }
 
         return next();
