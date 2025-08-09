@@ -6,7 +6,7 @@ export const isLoggedIn = async (req, res, next) => {
         const token = req.header("Authorization")?.split(" ")[1];
 
         if (!token) {
-            return res.redirect('/auth/login');
+            return res.redirect('/login');
         }
 
         const payload = jwt.verify(token, process.env.SECRET);
@@ -14,14 +14,14 @@ export const isLoggedIn = async (req, res, next) => {
         return next();
 
     } catch (error) {
-        return res.redirect("/auth/login?message=Authorisation failed. Retry Login");
+        return res.redirect("/login?message=Authorisation failed. Retry Login");
     }
 }
 
 export const isAdmin = async (req, res, next) => {
     try {
         if (!req.user) {
-            return res.redirect("/auth/login?message=Login to continue");
+            return res.redirect("/login?message=Login to continue");
         }
 
         if (req.user.role !== "admin") {

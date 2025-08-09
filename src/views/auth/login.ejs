@@ -32,7 +32,15 @@
 
             localStorage.setItem("token", data.data.token);
             alert("Login successful!");
-            window.location.href = "/blog";
+
+            console.log(data.data);
+
+            if (data.data.user.username === 'admin') {
+                window.location.href = "/admin/blog";
+            } else {
+                window.location.href = "/blog";
+            }
+
         } catch (error) {
             console.error("Error:", error);
             alert("Something went wrong. Please try again.");

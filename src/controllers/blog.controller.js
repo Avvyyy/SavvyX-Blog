@@ -128,3 +128,17 @@ export const deleteBlogPost = async (req, res) => {
         })
     }
 }
+
+export const getAdminBlogPosts = async (req, res) => {
+    try {
+        const blogPosts = await BlogPosts.find().lean();
+
+        res.render("admin/blogList", {
+            blogPosts,
+            user: req.user
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("An error occurred while fetching blog posts.");
+    }
+};

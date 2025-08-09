@@ -32,7 +32,7 @@ export const signgUp = async (req, res) => {
             return res.status(200).json({
                 status: true,
                 message: "User created successfully",
-                data: { token: token }
+                data: { token: token, user: {username: user.username, role: user.role}}
             })
         } else {
             return res.status(400).json({
@@ -61,7 +61,7 @@ export const login = async (req, res) => {
                 return res.status(200).json({
                     status: true,
                     message: "User logged in successfully",
-                    data: { token: token }
+                    data: { token: token, user: {username: user.username, role: user.role}}
                 })
             } else {
                 return res.status(400).json({
